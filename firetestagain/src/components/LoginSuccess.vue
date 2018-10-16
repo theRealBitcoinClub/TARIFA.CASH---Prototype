@@ -58,6 +58,16 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    goToLoginIfUserIsNull () {
+      if (firebase.auth().currentUser == null) {
+        this.$router.replace('/')
+      }
+    }
+  },
+  beforeMount () {
+    this.goToLoginIfUserIsNull()
   }
 }
 </script>
