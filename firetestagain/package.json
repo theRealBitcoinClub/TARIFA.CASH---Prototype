@@ -15,9 +15,12 @@
   },
   "dependencies": {
     "bitbox-cli": "^1.8.1",
+    "datacash": "^1.1.9",
     "firebase": "^5.5.3",
     "firebaseui": "^3.4.1",
     "jquery": "^3.3.1",
+    "qr-image": "^3.2.0",
+    "qrcode-generator": "^1.4.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
