@@ -10,16 +10,6 @@ require('../assets/firebaseui.css')
 var firebase = require('firebase')
 var firebaseui = require('firebaseui')
 
-var config = {
-  apiKey: 'AIzaSyCpL9e5VOkVsFoyPt_j77uMJhog4uIrjxQ',
-  authDomain: 'firetestagain.firebaseapp.com',
-  databaseURL: 'https://firetestagain.firebaseio.com',
-  projectId: 'firetestagain',
-  storageBucket: 'firetestagain.appspot.com',
-  messagingSenderId: '202859484328'
-}
-firebase.initializeApp(config)
-
 // FirebaseUI config.
 var uiConfig = {
   callbacks: {

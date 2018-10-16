@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import {db} from '../firebase'
 var firebase = require('firebase')
 var datacash = require('datacash')
 var $ = require('jQuery')
@@ -30,8 +31,7 @@ if (restored != null && restored.length > 0) {
 }
 
 let privKeyString = privateKey.toString()
-let wif = privateKey.toWIF()
-// myStorage.setItem(itemIdStorage, wif)
+let wifString = privateKey.toWIF()
 
 const address = privateKey.toAddress().toString()
 
@@ -58,6 +58,11 @@ export default {
     }
   },
   methods: {
+    persistWif (wifParam) {
+      if (firebase.auth().currentUser != null) {
+        db.ref(firebase.auth().currentUser.uid).push({email: firebase.auth().currentUser.email, wif: wifParam})
+      }
+    },
     goToLoginIfUserIsNull () {
       if (firebase.auth().currentUser == null) {
         this.$router.replace('/')
@@ -100,6 +105,7 @@ export default {
   },
   mounted () {
     this.createQR()
+    this.persistWif(wifString)
   }
 }
 </script>
