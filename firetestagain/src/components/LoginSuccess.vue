@@ -88,10 +88,11 @@ export default {
           }]
         }
       }
-      alert($('#msg').val() + ' try sent to: ' + $('#mySelect option:selected').text())
+      alert('pk' + this.privKeyString + ', ' + $('#msg').val() + ' try sent to: ' + $('#mySelect option:selected').text())
       datacash.send(config, function (err, res) {
         if (err) {
-          alert('Error:' + err)
+          console.log(err)
+          alert('Error check console:' + err)
         } else {
           alert($('#msg').val() + ' funds sent to: ' + $('#mySelect option:selected').text())
         }
