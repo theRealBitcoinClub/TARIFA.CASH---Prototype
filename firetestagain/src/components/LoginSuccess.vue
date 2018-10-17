@@ -22,38 +22,12 @@ var firebase = require('firebase')
 var datacash = require('datacash')
 var $ = require('jQuery')
 
-if (firebase.auth().currentUser != null) {
-  alert('authhff')
-  var maybe
-  db.ref('/users/' + firebase.auth().currentUser.uid).once('value', function (data) {
-    // let pKey
-    if (data.val() != null) {
-      alert('wif' + data.val().wif)
-      maybe = new datacash.bch.PrivateKey(data.val().wif)
-    } else {
-      alert('pKey')
-      maybe = new datacash.bch.PrivateKey()
-    }
-    // return pKey
-  }).then(function (kkk) {
-    alert('maybe' + maybe)
-    console.log(kkk)
-  })
-
-  // alert('www' + db.ref('/users/' + firebase.auth().currentUser.uid).child('wif').val())
-}
-
-var privateKey = new datacash.bch.PrivateKey()
-var privKeyString = privateKey.toString()
-var wifString = privateKey.toWIF()
-var address = privateKey.toAddress().toString()
-
 export default {
   name: 'LoginSuccess',
   data () {
     return {
       email: firebase.auth().currentUser != null ? firebase.auth().currentUser.email : 'user is null',
-      adr: address,
+      adr: 'adsfdsfdsddress',
       merchants: [
         {
           name: 'Choose Receiver',
@@ -71,6 +45,38 @@ export default {
     }
   },
   methods: {
+    chacha () {
+      if (firebase.auth().currentUser != null) {
+        alert('authhff')
+        var maybe
+        var self = this
+        db.ref('/users/' + firebase.auth().currentUser.uid).once('value', function (data) {
+          // let pKey
+          if (data.val() != null) {
+            alert('wif' + data.val().wif)
+            maybe = new datacash.bch.PrivateKey(data.val().wif)
+          } else {
+            alert('pKey')
+            maybe = new datacash.bch.PrivateKey()
+            this.persistWif(maybe.toWIF())
+          }
+          // return pKey
+        }).then(function (kkk) {
+          alert('maybe' + maybe)
+          console.log(kkk)
+          alert('maybe2' + maybe.toAddress().toString())
+          self.createQR(maybe.toAddress().toString())
+          // this.persistWif(wifString)
+        })
+
+        // alert('www' + db.ref('/users/' + firebase.auth().currentUser.uid).child('wif').val())
+      }
+
+      // var privateKey = new datacash.bch.PrivateKey()
+      // var privKeyString = privateKey.toString()
+      // var wifString = privateKey.toWIF()
+      // var address = privateKey.toAddress().toString()
+    },
     persistWif (wifParam) {
       if (firebase.auth().currentUser != null) {
         db.ref('/users/' + firebase.auth().currentUser.uid).set({email: firebase.auth().currentUser.email, wif: wifParam})
@@ -85,7 +91,7 @@ export default {
       var config = {
         data: ['0x6d02', $('#msg').val() + ' Energy beamed to: ' + $('#mySelect option:selected').text()],
         cash: {
-          key: privKeyString,
+          key: 'privfdsfdsKeyString',
           rpc: 'https://cashexplorer.bitcoin.com',
           fee: 250,
           to: [{
@@ -103,12 +109,12 @@ export default {
         }
       })
     },
-    createQR () {
+    createQR: function (addressP) {
       let qrcode = require('qrcode-generator')
       let typeNumber = 0
       let errorCorrectionLevel = 'H'
       let qr = qrcode(typeNumber, errorCorrectionLevel)
-      qr.addData('bitcoincash:' + address)
+      qr.addData('bitcoincash:' + addressP)
       qr.make()
       document.getElementById('qrcodeId').innerHTML = qr.createSvgTag(8, 16)
     }
@@ -117,8 +123,7 @@ export default {
     this.goToLoginIfUserIsNull()
   },
   mounted () {
-    this.createQR()
-    this.persistWif(wifString)
+    this.chacha()
   }
 }
 </script>
