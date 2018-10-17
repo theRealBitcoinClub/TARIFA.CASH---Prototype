@@ -27,7 +27,7 @@ export default {
   data () {
     return {
       email: firebase.auth().currentUser != null ? firebase.auth().currentUser.email : 'user is null',
-      adr: 'adsfdsfdsddress',
+      adr: '',
       merchants: [
         {
           name: 'Choose Receiver',
@@ -66,6 +66,7 @@ export default {
           console.log(kkk)
           alert('maybe2' + maybe.toAddress().toString())
           self.createQR(maybe.toAddress().toString())
+          self.adr = maybe.toAddress().toString()
           // this.persistWif(wifString)
         })
 
