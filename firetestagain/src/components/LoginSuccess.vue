@@ -22,18 +22,31 @@ var firebase = require('firebase')
 var datacash = require('datacash')
 var $ = require('jQuery')
 
-const restored = ''
-let privateKey
-if (restored != null && restored.length > 0) {
-  privateKey = new datacash.bch.PrivateKey(restored)
-} else {
-  privateKey = new datacash.bch.PrivateKey()
+if (firebase.auth().currentUser != null) {
+  alert('authhff')
+  var maybe
+  db.ref('/users/' + firebase.auth().currentUser.uid).once('value', function (data) {
+    // let pKey
+    if (data.val() != null) {
+      alert('wif' + data.val().wif)
+      maybe = new datacash.bch.PrivateKey(data.val().wif)
+    } else {
+      alert('pKey')
+      maybe = new datacash.bch.PrivateKey()
+    }
+    // return pKey
+  }).then(function (kkk) {
+    alert('maybe' + maybe)
+    console.log(kkk)
+  })
+
+  // alert('www' + db.ref('/users/' + firebase.auth().currentUser.uid).child('wif').val())
 }
 
-let privKeyString = privateKey.toString()
-let wifString = privateKey.toWIF()
-
-const address = privateKey.toAddress().toString()
+var privateKey = new datacash.bch.PrivateKey()
+var privKeyString = privateKey.toString()
+var wifString = privateKey.toWIF()
+var address = privateKey.toAddress().toString()
 
 export default {
   name: 'LoginSuccess',
@@ -60,7 +73,7 @@ export default {
   methods: {
     persistWif (wifParam) {
       if (firebase.auth().currentUser != null) {
-        db.ref(firebase.auth().currentUser.uid).push({email: firebase.auth().currentUser.email, wif: wifParam})
+        db.ref('/users/' + firebase.auth().currentUser.uid).set({email: firebase.auth().currentUser.email, wif: wifParam})
       }
     },
     goToLoginIfUserIsNull () {
