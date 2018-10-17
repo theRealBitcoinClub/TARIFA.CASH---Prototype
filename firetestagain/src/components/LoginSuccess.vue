@@ -28,6 +28,7 @@ export default {
     return {
       email: firebase.auth().currentUser != null ? firebase.auth().currentUser.email : 'user is null',
       adr: '',
+      privKeyString: 'dummy',
       merchants: [
         {
           name: 'Choose Receiver',
@@ -45,38 +46,24 @@ export default {
     }
   },
   methods: {
-    chacha () {
+    initPrivateKeyDrawQrCode () {
       if (firebase.auth().currentUser != null) {
-        alert('authhff')
-        var maybe
+        var pk
         var self = this
         db.ref('/users/' + firebase.auth().currentUser.uid).once('value', function (data) {
-          // let pKey
           if (data.val() != null) {
-            alert('wif' + data.val().wif)
-            maybe = new datacash.bch.PrivateKey(data.val().wif)
+            pk = new datacash.bch.PrivateKey(data.val().wif)
           } else {
-            alert('pKey')
-            maybe = new datacash.bch.PrivateKey()
-            this.persistWif(maybe.toWIF())
+            pk = new datacash.bch.PrivateKey()
+            this.persistWif(pk.toWIF())
           }
-          // return pKey
         }).then(function (kkk) {
-          alert('maybe' + maybe)
-          console.log(kkk)
-          alert('maybe2' + maybe.toAddress().toString())
-          self.createQR(maybe.toAddress().toString())
-          self.adr = maybe.toAddress().toString()
-          // this.persistWif(wifString)
+          let adrString = pk.toAddress().toString()
+          self.createQR(adrString)
+          self.adr = adrString
+          self.privKeyString = pk.toString()
         })
-
-        // alert('www' + db.ref('/users/' + firebase.auth().currentUser.uid).child('wif').val())
       }
-
-      // var privateKey = new datacash.bch.PrivateKey()
-      // var privKeyString = privateKey.toString()
-      // var wifString = privateKey.toWIF()
-      // var address = privateKey.toAddress().toString()
     },
     persistWif (wifParam) {
       if (firebase.auth().currentUser != null) {
@@ -92,7 +79,7 @@ export default {
       var config = {
         data: ['0x6d02', $('#msg').val() + ' Energy beamed to: ' + $('#mySelect option:selected').text()],
         cash: {
-          key: 'privfdsfdsKeyString',
+          key: this.privKeyString,
           rpc: 'https://cashexplorer.bitcoin.com',
           fee: 250,
           to: [{
@@ -124,7 +111,7 @@ export default {
     this.goToLoginIfUserIsNull()
   },
   mounted () {
-    this.chacha()
+    this.initPrivateKeyDrawQrCode()
   }
 }
 </script>
