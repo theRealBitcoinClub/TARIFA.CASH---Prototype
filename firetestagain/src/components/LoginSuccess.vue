@@ -20,7 +20,8 @@
 import {db} from '../firebase'
 var firebase = require('firebase')
 var datacash = require('datacash')
-var $ = require('jQuery')
+var $ = require('jquery')
+// require('bootstrap')
 
 export default {
   name: 'LoginSuccess',

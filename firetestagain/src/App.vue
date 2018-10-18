@@ -9,7 +9,18 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  metaInfo: {
+    // if no subcomponents specify a metaInfo.title, this title will be used
+    title: 'TRBC - Tarifa Cash',
+    // all titles will be injected into this template
+    titleTemplate: '%s | BCH Bitcoin',
+    meta: [
+      {'http-equiv': 'Content-Type', content: 'text/html; charset=utf-8'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1, shrink-to-fit=no'},
+      {name: 'description', content: 'Tarifa Cash is a local currency backed by BCH - Bitcoin Cash'}
+    ]
+  }
 }
 </script>
 

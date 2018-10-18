@@ -4,8 +4,10 @@ import Login from '@/components/Login'
 import LoginSuccess from '@/components/LoginSuccess'
 import TermsOfService from '@/components/TermsOfService'
 import Privacy from '@/components/Privacy'
+import Meta from 'vue-meta'
 
 Vue.use(Router)
+Vue.use(Meta)
 
 export default new Router({
   routes: [

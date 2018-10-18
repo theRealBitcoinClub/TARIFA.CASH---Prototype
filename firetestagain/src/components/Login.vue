@@ -51,7 +51,7 @@ var uiConfig = {
 
 // Initialize the FirebaseUI Widget using Firebase.
 var ui = new firebaseui.auth.AuthUI(firebase.auth())
-// Does this have any effect?
+// Does this have any effect on NodeJS?
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
 // Does this languagecode line have any effect?
 firebase.auth().languageCode = 'ES'
