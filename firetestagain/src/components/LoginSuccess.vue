@@ -73,7 +73,7 @@ export default {
     },
     goToLoginIfUserIsNull () {
       if (firebase.auth().currentUser == null) {
-        this.$router.replace('/')
+        this.$router.replace({name: 'Login'})
       }
     },
     sendVerificationEmail () {
@@ -82,7 +82,7 @@ export default {
         var self = this
         firebase.auth().currentUser.sendEmailVerification().then(function () {
           alert('Please verify your email!')
-          self.$router.replace('/')
+          self.$router.replace({name: 'Login'})
         })
       }
     },
