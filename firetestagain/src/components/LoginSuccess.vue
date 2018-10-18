@@ -27,7 +27,7 @@ export default {
   name: 'LoginSuccess',
   data () {
     return {
-      email: firebase.auth().currentUser != null ? firebase.auth().currentUser.email : 'user is null',
+      email: firebase.auth().currentUser != null ? (firebase.auth().currentUser.email != null ? firebase.auth().currentUser.email : firebase.auth().currentUser.phoneNumber) : 'You will be redirected to the login!',
       adr: '',
       privKeyString: 'dummy',
       merchants: [
@@ -56,7 +56,7 @@ export default {
             pk = new datacash.bch.PrivateKey(data.val().wif)
           } else {
             pk = new datacash.bch.PrivateKey()
-            this.persistWif(pk.toWIF())
+            self.persistWif(pk.toWIF())
           }
         }).then(function (kkk) {
           let adrString = pk.toAddress().toString()
@@ -74,6 +74,16 @@ export default {
     goToLoginIfUserIsNull () {
       if (firebase.auth().currentUser == null) {
         this.$router.replace('/')
+      }
+    },
+    sendVerificationEmail () {
+      let user = firebase.auth().currentUser
+      if (user != null && !user.phoneNumber && !user.emailVerified) {
+        var self = this
+        firebase.auth().currentUser.sendEmailVerification().then(function () {
+          alert('Please verify your email!')
+          self.$router.replace('/')
+        })
       }
     },
     sendEnergy: function (event) {
@@ -111,6 +121,7 @@ export default {
   },
   beforeMount () {
     this.goToLoginIfUserIsNull()
+    this.sendVerificationEmail()
   },
   mounted () {
     this.initPrivateKeyDrawQrCode()

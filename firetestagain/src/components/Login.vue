@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div id="loader">Loading...</div>
+    <div id="loader"><h1>Loading...</h1><h3>Email verification is mandatory!</h3><h4>Please refresh your Browser after verification</h4></div>
     <div id="firebaseui-auth-container"></div>
   </div>
 </template>
