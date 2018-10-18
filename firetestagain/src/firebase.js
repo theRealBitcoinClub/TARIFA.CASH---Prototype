@@ -1,12 +1,12 @@
 import { initializeApp } from 'firebase'
 
 const app = initializeApp({
-  apiKey: 'AIzaSyCpL9e5VOkVsFoyPt_j77uMJhog4uIrjxQ',
-  authDomain: 'firetestagain.firebaseapp.com',
-  databaseURL: 'https://firetestagain.firebaseio.com',
-  projectId: 'firetestagain',
-  storageBucket: 'firetestagain.appspot.com',
-  messagingSenderId: '202859484328'
+  apiKey: "AIzaSyCiBdZln9wlNoE0vPathY1uWxDIh9o-lsA",
+  authDomain: "tarifacash.firebaseapp.com",
+  databaseURL: "https://tarifacash.firebaseio.com",
+  projectId: "tarifacash",
+  storageBucket: "tarifacash.appspot.com",
+  messagingSenderId: "225078073600"
 })
 
 export const db = app.database()
