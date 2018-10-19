@@ -1,17 +1,22 @@
 <template>
   <div class="loginSuccess">
     <h2>{{email}}</h2>
-    <h3>{{adr}}</h3>
-    <div class='center'>
-      <div id="qrcodeId" class="qrContainer"></div>
-    </div>
-    <hr>
-    <div class='form'>
-      <select class="chooseBox" id="mySelect">
-        <option :value="data.address" v-for="(data, index) in merchants" :key="index">{{data.name}}</option>
-      </select>
-      <input id='msg' type="number" placeholder='How much energy do you want to send?' />
-      <a href='#' id='done' v-on:click="sendEnergy" class='btn'>Send Energy</a>
+    <h3><a target='_blank' :href="explorer + adr">{{adr}}</a></h3>
+    <div class='container'>
+      <div class='center'>
+        <a target='_blank' :href="explorer + adr">
+          <div id="qrcodeId"></div>
+        </a>
+      </div>
+      <hr>
+      <div class='form'>
+        <select class="chooseBox" id="mySelect">
+          <option :value="data.address" v-for="(data, index) in merchants" :key="index">{{data.name}}</option>
+        </select>
+        <input id='eur' type="number" class="currency" placeholder='EUR' />
+        <input id='cent' type="number" class="currency" placeholder='CENTS' />
+        <a href='#' id='done' v-on:click="sendEnergy" class='btn'>Send Energy</a>
+      </div>
     </div>
   </div>
 </template>
@@ -28,6 +33,7 @@ export default {
   data () {
     return {
       email: firebase.auth().currentUser != null ? (firebase.auth().currentUser.email != null ? firebase.auth().currentUser.email : firebase.auth().currentUser.phoneNumber) : 'You will be redirected to the login!',
+      explorer: 'https://explorer.bitcoin.com/bch/address/',
       adr: '',
       privKeyString: 'dummy',
       merchants: [
@@ -86,27 +92,86 @@ export default {
         })
       }
     },
+    getPrice () {
+    },
     sendEnergy: function (event) {
-      var config = {
-        data: ['0x6d02', $('#msg').val() + ' Energy beamed to: ' + $('#mySelect option:selected').text()],
-        cash: {
-          key: this.privKeyString,
-          rpc: 'https://cashexplorer.bitcoin.com',
-          fee: 250,
-          to: [{
-            address: $('#mySelect').val(),
-            value: parseInt($('#msg').val())
-          }]
-        }
+      var receiver = $('#mySelect').val()
+      var receiverName = $('#mySelect option:selected').text()
+      if (receiver === '0') {
+        alert('Please select a Receiver')
+        return
       }
-      alert('pk' + this.privKeyString + ', ' + $('#msg').val() + ' try sent to: ' + $('#mySelect option:selected').text())
-      datacash.send(config, function (err, res) {
-        if (err) {
-          console.log(err)
-          alert('Error check console:' + err)
-        } else {
-          alert($('#msg').val() + ' funds sent to: ' + $('#mySelect option:selected').text())
+      var eString = $('#eur').val()
+      alert('es:' + eString)
+      if (eString == null || eString === '') {
+        alert('Please set the amount in EUR')
+        return
+      }
+      if (eString.indexOf(',') !== -1 || eString.indexOf('.') !== -1) {
+        alert('Please set the amount in EUR without comma or point')
+        return
+      }
+      /* if (eString.charAt(0) === '0') {
+        alert('Please remove leading zero from EUR')
+        return
+      } */
+      var cString = $('#cent').val()
+      alert('cs:' + cString)
+      if (cString.indexOf(',') !== -1 || cString.indexOf('.') !== -1) {
+        alert('Please set the amount in CENT without comma or point')
+        return
+      }
+      if (cString == null || cString === '' || cString === '0') {
+        cString = '00'
+      }
+      if (cString.length == 1) {
+        cString = '0' + cString
+      }
+      var priceString = eString + ',' + cString + '€'
+      alert('Price:' + priceString)
+      var self = this
+      let request = require('request')
+      request('https://www.bitstamp.net/api/v2/ticker/bcheur/', function (error, response, body) {
+        if (error) {
+          alert('There has been an error retrieving BCH price from Bitstamp')
+          return
         }
+
+        let eur = parseInt(eString)
+        let cent = parseInt(cString)
+        let centsTotal = (eur * 100) + cent
+        alert('centsTotal:' + centsTotal)
+
+        let bchPrice = JSON.parse(body).last
+        alert('Price:' + bchPrice)
+        let centPrice = bchPrice * 100
+        alert('centPrice:' + centPrice)
+        let bchCount = centsTotal / centPrice
+        alert('bchCount:' + bchCount)
+        let satCount = parseInt(bchCount * 100000000)
+        alert('satCount:' + satCount)
+
+        var config = {
+          data: ['0x6d02', 'http://tarifa.cash: ' + priceString + ' send to: ' + receiverName],
+          cash: {
+            key: self.privKeyString,
+            rpc: 'https://cashexplorer.bitcoin.com',
+            fee: 250,
+            to: [{
+              address: receiver,
+              value: satCount
+            }]
+          }
+        }
+        alert('pk:' + self.privKeyString + ', ' + priceString + ' try sent to: ' + receiverName)
+        datacash.send(config, function (err, res) {
+          if (err) {
+            console.log(err)
+            alert('Error check console:' + err)
+          } else {
+            alert(priceString + ' funds sent to: ' + receiverName)
+          }
+        })
       })
     },
     createQR: function (addressP) {
@@ -173,16 +238,20 @@ h1, h2 {
 }
 .container {
   margin:0 auto;
-  width: 320px;
+  width: 400px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   -ms-word-break: break-all;
   word-break: break-word;
 }
+input.currency {
+}
 .form input {
   padding: 10px;
-  width: 100%;
+  width: 376px;
   font-size: 14px;
+}
+.form {
 }
 .chooseBox {
   padding: 10px;
@@ -191,10 +260,6 @@ h1, h2 {
 }
 .hidden {
   display: none;
-}
-.qrContainer {
-  width: 400px;
-  height: 400px;
 }
 svg {
   width: 400px;
