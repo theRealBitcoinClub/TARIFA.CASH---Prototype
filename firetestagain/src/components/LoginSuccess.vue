@@ -124,7 +124,7 @@ export default {
       if (cString == null || cString === '' || cString === '0') {
         cString = '00'
       }
-      if (cString.length == 1) {
+      if (cString.length === 1) {
         cString = '0' + cString
       }
       var priceString = eString + ',' + cString + '€'
