@@ -122,17 +122,6 @@ export default {
       }
       return eString + ',' + cString + '€'
     },
-    buildRequestOptions () {
-      return {
-        url: 'https://www.bitstamp.net/api/v2/ticker/bcheur/',
-        method: 'GET'
-        /* headers: {
-          'Accept': 'application/json',
-          'Accept-Charset': 'utf-8',
-          'Request-Mode': 'no-cors'
-        } */
-      }
-    },
     getSatCount (eString, cString, bchPrice) {
       let eur = parseInt(eString)
       let cent = parseInt(cString)
