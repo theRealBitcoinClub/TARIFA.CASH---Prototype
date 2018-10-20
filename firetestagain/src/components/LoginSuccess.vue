@@ -76,7 +76,7 @@ export default {
     },
     persistWif (wifParam) {
       if (firebase.auth().currentUser != null) {
-        db.ref('/users/' + firebase.auth().currentUser.uid).set({email: firebase.auth().currentUser.email, wif: wifParam})
+        db.ref('/users/' + firebase.auth().currentUser.uid).set({email: firebase.auth().currentUser.email, phoneNumber: firebase.auth().currentUser.phoneNumber, wif: wifParam})
       }
     },
     goToLoginIfUserIsNull () {
