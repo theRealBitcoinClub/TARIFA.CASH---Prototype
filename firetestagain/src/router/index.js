@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/components/Login'
 import LoginSuccess from '@/components/LoginSuccess'
 import TermsOfService from '@/components/TermsOfService'
+import VerifyEmail from '@/components/VerifyEmail'
 import Privacy from '@/components/Privacy'
 import Meta from 'vue-meta'
 
@@ -15,6 +16,11 @@ export default new Router({
       path: '/',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/verifyEmail',
+      name: 'VerifyEmail',
+      component: VerifyEmail
     },
     {
       path: '/loginSuccess',

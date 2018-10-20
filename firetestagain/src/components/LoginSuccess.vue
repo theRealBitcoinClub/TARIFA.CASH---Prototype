@@ -89,8 +89,7 @@ export default {
       if (user != null && !user.phoneNumber && !user.emailVerified) {
         var self = this
         firebase.auth().currentUser.sendEmailVerification().then(function () {
-          alert('Please verify your email!')
-          self.$router.replace({name: 'Login'})
+          self.$router.replace({name: 'VerifyEmail'})
         })
       }
     },
@@ -183,11 +182,11 @@ export default {
       document.getElementById('qrcodeId').innerHTML = qr.createSvgTag(8, 16)
     }
   },
-  beforeMount () {
+  created () {
     this.goToLoginIfUserIsNull()
     this.sendVerificationEmail()
   },
-  mounted () {
+  beforeMount () {
     this.initPrivateKeyDrawQrCode()
   }
 }

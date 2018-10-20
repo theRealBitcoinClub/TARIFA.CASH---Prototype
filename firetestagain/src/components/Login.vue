@@ -1,6 +1,8 @@
 <template>
   <div class="login">
-    <div id="loader"><h1>Loading...</h1><h3>Email verification is mandatory!</h3><h4>Please refresh your Browser after verification</h4></div>
+    <div id="loader">
+      <img src='../assets/loading.svg' />
+    </div>
     <div id="firebaseui-auth-container"></div>
   </div>
 </template>
@@ -52,7 +54,7 @@ var uiConfig = {
 // Initialize the FirebaseUI Widget using Firebase.
 var ui = new firebaseui.auth.AuthUI(firebase.auth())
 // Does this have any effect on NodeJS?
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
 // Does this languagecode line have any effect?
 firebase.auth().languageCode = 'ES'
 // The start method will wait until the DOM is loaded.
@@ -60,17 +62,7 @@ firebase.auth().languageCode = 'ES'
 ui.start('#firebaseui-auth-container', uiConfig)
 
 export default {
-  name: 'Login',
-  data () {
-    return {
-      email: firebase.auth().currentUser != null ? firebase.auth().currentUser.email : 'user is null'
-    }
-  },
-  methods: {
-    isLoggedOut () {
-      return firebase.auth().currentUser == null
-    }
-  }
+  name: 'Login'
 }
 </script>
 
