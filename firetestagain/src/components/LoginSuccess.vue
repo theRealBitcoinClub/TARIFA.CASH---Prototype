@@ -28,7 +28,7 @@ var datacash = require('datacash')
 var $ = require('jquery')
 let BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk').default
 let BITBOX = new BITBOXSDK()
-// require('bootstrap')
+// require('bootstrap-vue')
 
 export default {
   name: 'LoginSuccess',

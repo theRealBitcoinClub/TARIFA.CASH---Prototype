@@ -17,6 +17,7 @@
     "bitbox-cli": "^1.8.1",
     "bitbox-sdk": "^2.0.4",
     "bootstrap": "^4.1.3",
+    "bootstrap-vue": "^2.0.0-rc.11",
     "datacash": "^1.1.9",
     "firebase": "^5.5.3",
     "firebaseui": "^3.4.1",
