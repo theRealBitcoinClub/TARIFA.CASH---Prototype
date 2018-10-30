@@ -226,11 +226,9 @@ export default {
       datacash.send(config, function (err, res) {
         if (err) {
           console.log(err)
-          alert('failed')
           self.showSendSuccess = false
           self.showSendFailed = true
         } else {
-          alert('success')
           self.showAmountToSend = false
           self.showSendFailed = false
           self.showSendSuccess = true
