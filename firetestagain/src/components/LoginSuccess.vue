@@ -133,6 +133,8 @@ export default {
       this.showEurosAlert = false
       this.showCommaEurosAlert = false
       this.showTooManyCentsAlert = false
+      this.showSendFailed = false
+      this.showSendSuccess = false
       if (receiver === '0') {
         this.showReceiverAlert = true
         return false
@@ -145,7 +147,7 @@ export default {
         this.showCommaEurosAlert = true
         return false
       }
-      if (cString.indexOf(',') !== -1 || cString.indexOf('.') !== -1 || eString.indexOf('-') !== -1) {
+      if (cString.indexOf(',') !== -1 || cString.indexOf('.') !== -1 || cString.indexOf('-') !== -1) {
         this.showCommaCentsAlert = true
         return false
       }
@@ -188,7 +190,6 @@ export default {
       this.showAmountToSend = true
     },
     sendEnergy: async function (event) {
-      var self = this
       var receiver = $('#mySelect').val()
       this.receiverName = $('#mySelect option:selected').text()
       var eString = $('#eur').val()
@@ -201,15 +202,15 @@ export default {
       var priceString = this.formatPrice(eString, cString)
       this.amountToSend = priceString
       this.showAmountToSend = true
-      alert('Price: ' + priceString)
 
       let currentPrice = await BITBOX.Price.current('eur')
 
       let satCount = this.getSatCount(eString, cString, currentPrice)
 
-      this.sendWithDataCash(priceString, this.receiverName, self.privKeyString, receiver, satCount)
+      this.sendWithDataCash(priceString, this.receiverName, this.privKeyString, receiver, satCount)
     },
     sendWithDataCash (priceString, receiverName, pk, receiver, satCount) {
+      var self = this
       var config = {
         data: ['0x6d02', 'http://tarifa.cash: ' + priceString + ' send to: ' + receiverName],
         cash: {
@@ -222,13 +223,17 @@ export default {
           }]
         }
       }
-      alert('TRY! ' + priceString + ' sent to: ' + receiverName)
       datacash.send(config, function (err, res) {
         if (err) {
           console.log(err)
-          alert('ERROR! Please click the send button again!')
+          alert('failed')
+          self.showSendSuccess = false
+          self.showSendFailed = true
         } else {
-          alert('SUCCESS! ' + priceString + ' sent to: ' + receiverName)
+          alert('success')
+          self.showAmountToSend = false
+          self.showSendFailed = false
+          self.showSendSuccess = true
         }
       })
     },
