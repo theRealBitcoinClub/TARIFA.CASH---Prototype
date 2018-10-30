@@ -9,7 +9,7 @@
         </a>
       </div>
       <hr>
-      <div class='form'>
+      <div class="form">
         <div class="input-group mb-1">
           <div class="input-group-prepend">
             <label class="input-group-text" for="mySelect">Receiver:</label>
@@ -18,23 +18,30 @@
             <option :value="data.address" v-for="(data, index) in merchants" :key="index">{{data.name}}</option>
           </select>
         </div>
-        <div>
-          <div class="input-group mb-1">
+        <b-alert dismissible :show="showReceiverAlert" variant="danger">Please choose a receiver.</b-alert>
+        <div class="form-row mb-1">
+          <div class="input-group mb-1 col">
             <div class="input-group-prepend">
               <span class="input-group-text">€</span>
             </div>
-            <input type="number" class="form-control">
+            <input id='eur' type="number" class="form-control">
           </div>
-          <div class="input-group mb-1">
+          <div class="input-group mb-1 col">
             <div class="input-group-prepend">
               <span class="input-group-text">Cents</span>
             </div>
-            <input type="number" class="form-control">
+            <input id='cent' type="number" class="form-control">
           </div>
         </div>
-        <input id='eur' type="number" class="currency" placeholder='EUR' />
-        <input id='cent' type="number" class="currency" placeholder='CENTS' />
-        <a href='#' id='done' v-on:click="sendEnergy" class='btn'>Send Energy</a>
+        <b-alert dismissible :show="showEurosAlert" variant="danger">Please enter the amount in Euros.</b-alert>
+        <b-alert dismissible :show="showCommaEurosAlert" variant="danger">Please set the amount in EUR without comma, point or minus.</b-alert>
+        <b-alert dismissible :show="showCommaCentsAlert" variant="danger">Please set the amount in Cents without comma, point or minus.</b-alert>
+        <b-alert dismissible :show="showTooManyCentsAlert" variant="danger">Please set the amount in cents between 0 and 99.</b-alert>
+        <b-alert dismissible :show="showSendSuccess" variant="success">You did successfully send {{amountToSend}} to {{receiverName}}!</b-alert>
+        <b-alert dismissible :show="showSendFailed" variant="danger">Sending {{amountToSend}} to {{receiverName}} failed! Please try again!</b-alert>
+        <b-alert dismissible :show="showAmountToSend" variant="info">If you want to send: {{amountToSend}} to {{receiverName}} click the send button otherwise change the amount and verify again!</b-alert>
+        <a href='#' v-on:click="verifyInputs" class='btn-verify mb-1'>Verify Inputs</a>
+        <a href='#' v-if="showAmountToSend" v-on:click="sendEnergy" class='btn-done'>Send Energy</a>
       </div>
     </div>
   </div>
@@ -52,6 +59,15 @@ export default {
   name: 'LoginSuccess',
   data () {
     return {
+      showReceiverAlert: false,
+      showEurosAlert: false,
+      showCommaEurosAlert: false,
+      showCommaCentsAlert: false,
+      showAmountToSend: false,
+      showSendFailed: false,
+      showSendSuccess: false,
+      showTooManyCentsAlert: false,
+      amountToSend: '',
       email: firebase.auth().currentUser != null ? (firebase.auth().currentUser.email != null ? firebase.auth().currentUser.email : firebase.auth().currentUser.phoneNumber) : 'You will be redirected to the login!',
       explorer: 'https://explorer.bitcoin.com/bch/address/',
       adr: '',
@@ -112,20 +128,29 @@ export default {
       }
     },
     isInputValid (receiver, eString, cString) {
+      this.showCommaCentsAlert = false
+      this.showReceiverAlert = false
+      this.showEurosAlert = false
+      this.showCommaEurosAlert = false
+      this.showTooManyCentsAlert = false
       if (receiver === '0') {
-        alert('Please select a Receiver')
+        this.showReceiverAlert = true
         return false
       }
       if (eString == null || eString === '') {
-        alert('Please set the amount in EUR')
+        this.showEurosAlert = true
         return false
       }
-      if (eString.indexOf(',') !== -1 || eString.indexOf('.') !== -1) {
-        alert('Please set the amount in EUR without comma or point')
+      if (eString.indexOf(',') !== -1 || eString.indexOf('.') !== -1 || eString.indexOf('-') !== -1) {
+        this.showCommaEurosAlert = true
         return false
       }
-      if (cString.indexOf(',') !== -1 || cString.indexOf('.') !== -1) {
-        alert('Please set the amount in CENT without comma or point')
+      if (cString.indexOf(',') !== -1 || cString.indexOf('.') !== -1 || eString.indexOf('-') !== -1) {
+        this.showCommaCentsAlert = true
+        return false
+      }
+      if (cString.length > 2) {
+        this.showTooManyCentsAlert = true
         return false
       }
       return true
@@ -147,10 +172,10 @@ export default {
       let bchCount = centsTotal / centPrice
       return parseInt(bchCount * 100000000)
     },
-    sendEnergy: async function (event) {
-      var self = this
+    verifyInputs: function (event) {
+      this.showAmountToSend = false
       var receiver = $('#mySelect').val()
-      var receiverName = $('#mySelect option:selected').text()
+      this.receiverName = $('#mySelect option:selected').text()
       var eString = $('#eur').val()
       var cString = $('#cent').val()
 
@@ -159,13 +184,30 @@ export default {
       }
 
       var priceString = this.formatPrice(eString, cString)
+      this.amountToSend = priceString
+      this.showAmountToSend = true
+    },
+    sendEnergy: async function (event) {
+      var self = this
+      var receiver = $('#mySelect').val()
+      this.receiverName = $('#mySelect option:selected').text()
+      var eString = $('#eur').val()
+      var cString = $('#cent').val()
+
+      if (!this.isInputValid(receiver, eString, cString)) {
+        return
+      }
+
+      var priceString = this.formatPrice(eString, cString)
+      this.amountToSend = priceString
+      this.showAmountToSend = true
       alert('Price: ' + priceString)
 
       let currentPrice = await BITBOX.Price.current('eur')
 
       let satCount = this.getSatCount(eString, cString, currentPrice)
 
-      this.sendWithDataCash(priceString, receiverName, self.privKeyString, receiver, satCount)
+      this.sendWithDataCash(priceString, this.receiverName, self.privKeyString, receiver, satCount)
     },
     sendWithDataCash (priceString, receiverName, pk, receiver, satCount) {
       var config = {
@@ -245,8 +287,19 @@ h1, h2 {
   font-weight: 700;
   margin: 0;
 }
-.btn {
-  background: #4772F6;
+.btn-done {
+  background: #009688;
+  font-weight: 400;
+  font-size: 18px;
+  color: white;
+  display: block;
+  text-align: center;
+  padding: 10px;
+}
+.btn-verify {
+  background: #2196F3;
+  font-weight: 400;
+  font-size: 18px;
   color: white;
   display: block;
   text-align: center;
@@ -260,25 +313,8 @@ h1, h2 {
   -ms-word-break: break-all;
   word-break: break-word;
 }
-input.currency {
-}
-.form input {
-  padding: 10px;
-  font-size: 14px;
-}
-.form {
-}
-.chooseBox {
-  padding: 10px;
-  width: 100%;
-  font-size: 14px;
-}
 .hidden {
   display: none;
-}
-svg {
-  width: 400px;
-  height: 400px;
 }
 #submit {
   font-size: 12px;
@@ -289,12 +325,6 @@ svg {
 }
 .feed {
   width: 100%;
-}
-a.outlink {
-  padding: 5px;
-  text-align: right;
-  display: block;
-  color: #F97467;
 }
 .row {
   border-bottom: 1px solid rgba(0,0,0,0.1);
