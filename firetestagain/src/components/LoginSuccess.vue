@@ -10,9 +10,28 @@
       </div>
       <hr>
       <div class='form'>
-        <select class="chooseBox" id="mySelect">
-          <option :value="data.address" v-for="(data, index) in merchants" :key="index">{{data.name}}</option>
-        </select>
+        <div class="input-group mb-1">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="mySelect">Receiver:</label>
+          </div>
+          <select class="custom-select mb-1" id="mySelect">
+            <option :value="data.address" v-for="(data, index) in merchants" :key="index">{{data.name}}</option>
+          </select>
+        </div>
+        <div>
+          <div class="input-group mb-1">
+            <div class="input-group-prepend">
+              <span class="input-group-text">€</span>
+            </div>
+            <input type="number" class="form-control">
+          </div>
+          <div class="input-group mb-1">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Cents</span>
+            </div>
+            <input type="number" class="form-control">
+          </div>
+        </div>
         <input id='eur' type="number" class="currency" placeholder='EUR' />
         <input id='cent' type="number" class="currency" placeholder='CENTS' />
         <a href='#' id='done' v-on:click="sendEnergy" class='btn'>Send Energy</a>
@@ -28,7 +47,6 @@ var datacash = require('datacash')
 var $ = require('jquery')
 let BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk').default
 let BITBOX = new BITBOXSDK()
-// require('bootstrap-vue')
 
 export default {
   name: 'LoginSuccess',
@@ -183,7 +201,7 @@ export default {
     }
   },
   created () {
-    this.goToLoginIfUserIsNull()
+    // this.goToLoginIfUserIsNull()
     this.sendVerificationEmail()
   },
   beforeMount () {
@@ -246,7 +264,6 @@ input.currency {
 }
 .form input {
   padding: 10px;
-  width: 376px;
   font-size: 14px;
 }
 .form {

@@ -1,6 +1,20 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
+    <b-navbar toggleable="md" type="dark" variant="info">
+      <b-navbar-brand href="https://tarifa.cash">TARIFA.CASH</b-navbar-brand>
+      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+      <b-collapse is-nav id="nav_collapse">
+        <b-navbar-nav>
+          <b-nav-item href="#/tos">Terms of Service</b-nav-item>
+          <b-nav-item href="#/privacy">Privacy Policy</b-nav-item>
+        </b-navbar-nav>
+
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item href="https://tarifa.cash">Signout</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
     <transition name="moveInUp">
       <router-view/>
     </transition>

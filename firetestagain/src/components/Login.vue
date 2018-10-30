@@ -1,8 +1,13 @@
 <template>
   <div class="login">
+    <img src="../assets/logo.png">
     <div id="loader">
+      <b-alert show>Loading...</b-alert>
       <img src='../assets/loading.svg' />
     </div>
+    <b-alert variant="success" show>
+      Welcome to Tarifa Cash! You can Sign-Up with Email or Phone!
+    </b-alert>
     <div id="firebaseui-auth-container"></div>
   </div>
 </template>
@@ -64,6 +69,7 @@ ui.start('#firebaseui-auth-container', uiConfig)
 export default {
   name: 'Login'
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
