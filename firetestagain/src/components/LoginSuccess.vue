@@ -1,7 +1,7 @@
 <template>
   <div class="loginSuccess">
     <div class='container'>
-      <h2>{{emailOrPhone}}</h2>
+      <h2 class="mb-3">{{emailOrPhone}}</h2>
       <h3><a target='_blank' :href="explorer + adr">{{adr}}</a></h3>
       <div class='center'>
         <a target='_blank' :href="explorer + adr">
@@ -10,27 +10,27 @@
       </div>
       <hr />
       <div class="form">
-        <div class="input-group mb-1">
+        <div class="input-group mb-2">
           <div class="input-group-prepend">
             <label class="input-group-text" for="mySelect">Receiver:</label>
           </div>
-          <select class="custom-select mb-1" id="mySelect">
+          <select class="custom-select" id="mySelect" @change="verifyInputs">
             <option :value="data.address" v-for="(data, index) in merchants" :key="index">{{data.name}}</option>
           </select>
         </div>
         <b-alert :show="showReceiverAlert" variant="danger">Please choose a receiver.</b-alert>
-        <div class="form-row mb-1">
-          <div class="input-group mb-1 col">
+        <div class="form-row mb-2">
+          <div class="input-group col">
             <div class="input-group-prepend">
               <span class="input-group-text">€</span>
             </div>
-            <input id='eur' type="number" min="0" class="form-control">
+            <input id='eur' type="number" min="0" class="form-control" @input="verifyInputs">
           </div>
-          <div class="input-group mb-1 col">
+          <div class="input-group col">
             <div class="input-group-prepend">
               <span class="input-group-text">Cents</span>
             </div>
-            <input id='cent' type="number" min="0" max="99" class="form-control">
+            <input id='cent' type="number" min="0" max="99" class="form-control" @input="verifyInputs">
           </div>
         </div>
         <b-alert :show="showEurosAlert" variant="danger">Please enter the amount in Euros.</b-alert>
@@ -40,9 +40,8 @@
         <b-alert :show="showMinimumAmountAlert" variant="danger">Please enter an amount of more than 0,05€ in total.</b-alert>
         <b-alert :show="showSendSuccess" variant="success">You did successfully send {{amountToSend}} to {{receiverName}}!</b-alert>
         <b-alert :show="showSendFailed" variant="danger">Sending {{amountToSend}} to {{receiverName}} failed! Please check your funds by clicking the QR-Code or Address above!</b-alert>
-        <b-alert :show="showAmountToSend" variant="info">If you want to send: {{amountToSend}} to {{receiverName}} click the send button otherwise change the amount and verify again!</b-alert>
+        <b-alert :show="showAmountToSend" variant="info">If you want to send: {{amountToSend}} to {{receiverName}} click the send button!</b-alert>
         <b-alert :show="showIsSending" variant="warning">Sending {{amountToSend}} to {{receiverName}}!</b-alert>
-        <a href='#' v-on:click="verifyInputs" class='btn-verify mb-1'>Verify Inputs</a>
         <a href='#' v-if="showAmountToSend" v-on:click="sendEnergy" class='btn-done'>Send Energy</a>
       </div>
     </div>
@@ -158,12 +157,19 @@ export default {
         return false
       }
       cString = this.setMinimumCents(cString)
+
       let tot = this.getCentsTotal(eString, cString)
       if (tot < 5) {
         this.showMinimumAmountAlert = true
         return false
       }
       return true
+    },
+    removeZero (s) {
+      if (s.indexOf('0') === 0 && s.length > 1) {
+        return this.removeZero(s.substr(1, s.length))
+      }
+      return s
     },
     setMinimumCents (c) {
       if (c == null || c === '' || c === '0') {
@@ -173,6 +179,7 @@ export default {
     },
     formatPrice (eString, cString) {
       cString = this.setMinimumCents(cString)
+      eString = this.removeZero(eString)
       if (cString.length === 1) {
         cString = '0' + cString
       }
