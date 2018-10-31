@@ -1,13 +1,14 @@
 <template>
   <div class="login">
-    <img src="../assets/logo.png">
+    <div id="welcome" style="display:none">
+      <b-alert variant="success" show>
+        Welcome to Tarifa Cash! You can Sign-Up with Email or Phone!
+      </b-alert>
+    </div>
     <div id="loader">
       <b-alert show>Loading...</b-alert>
       <img src='../assets/loading.svg' />
     </div>
-    <b-alert variant="success" show>
-      Welcome to Tarifa Cash! You can Sign-Up with Email or Phone!
-    </b-alert>
     <div id="firebaseui-auth-container"></div>
   </div>
 </template>
@@ -30,6 +31,7 @@ var uiConfig = {
       // The widget is rendered.
       // Hide the loader.
       document.getElementById('loader').style.display = 'none'
+      document.getElementById('welcome').style.display = 'inline'
     }
   },
   signInFlow: 'redirect',

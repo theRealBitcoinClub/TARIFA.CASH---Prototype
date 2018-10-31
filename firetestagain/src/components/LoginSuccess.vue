@@ -1,14 +1,13 @@
 <template>
   <div class="loginSuccess">
-    <div class='container'>
-      <h2 class="mb-3">{{emailOrPhone}}</h2>
-      <h3><a target='_blank' :href="explorer + adr">{{adr}}</a></h3>
-      <div class='center'>
+    <div class='cont'>
+      <h2>{{emailOrPhone}}</h2>
+      <!-- h3><a target='_blank' :href="explorer + adr">{{adr}}</a></h3-->
+      <div class='center mb-2'>
         <a target='_blank' :href="explorer + adr">
           <div id="qrcodeId"></div>
         </a>
       </div>
-      <hr />
       <div class="form">
         <div class="input-group mb-2">
           <div class="input-group-prepend">
@@ -18,7 +17,7 @@
             <option :value="data.address" v-for="(data, index) in merchants" :key="index">{{data.name}}</option>
           </select>
         </div>
-        <b-alert :show="showReceiverAlert" variant="danger">Please choose a receiver.</b-alert>
+        <b-alert class="mb-2" :show="showReceiverAlert" variant="danger">Please choose a receiver.</b-alert>
         <div class="form-row mb-2">
           <div class="input-group col">
             <div class="input-group-prepend">
@@ -33,15 +32,15 @@
             <input id='cent' type="number" min="0" max="99" class="form-control" @input="verifyInputs">
           </div>
         </div>
-        <b-alert :show="showEurosAlert" variant="danger">Please enter the amount in Euros.</b-alert>
-        <b-alert :show="showCommaEurosAlert" variant="danger">Please set the amount in EUR without comma, point or minus.</b-alert>
-        <b-alert :show="showCommaCentsAlert" variant="danger">Please set the amount in Cents without comma, point or minus.</b-alert>
-        <b-alert :show="showTooManyCentsAlert" variant="danger">Please set the amount in cents between 0 and 99.</b-alert>
-        <b-alert :show="showMinimumAmountAlert" variant="danger">Please enter an amount of more than 0,05€ in total.</b-alert>
-        <b-alert :show="showSendSuccess" variant="success">You did successfully send {{amountToSend}} to {{receiverName}}!</b-alert>
-        <b-alert :show="showSendFailed" variant="danger">Sending {{amountToSend}} to {{receiverName}} failed! Please check your funds by clicking the QR-Code or Address above!</b-alert>
-        <b-alert :show="showAmountToSend" variant="info">If you want to send: {{amountToSend}} to {{receiverName}} click the send button!</b-alert>
-        <b-alert :show="showIsSending" variant="warning">Sending {{amountToSend}} to {{receiverName}}!</b-alert>
+        <b-alert class="mb-2" :show="showEurosAlert" variant="danger">Please enter the amount in Euros.</b-alert>
+        <b-alert class="mb-2" :show="showCommaEurosAlert" variant="danger">Please set the amount in EUR without comma, point or minus.</b-alert>
+        <b-alert class="mb-2" :show="showCommaCentsAlert" variant="danger">Please set the amount in Cents without comma, point or minus.</b-alert>
+        <b-alert class="mb-2" :show="showTooManyCentsAlert" variant="danger">Please set the amount in cents between 0 and 99.</b-alert>
+        <b-alert class="mb-2" :show="showMinimumAmountAlert" variant="danger">Please enter an amount of more than 0,05€ in total.</b-alert>
+        <b-alert class="mb-2" :show="showSendSuccess" variant="success">You did successfully send {{amountToSend}} to {{receiverName}}!</b-alert>
+        <b-alert class="mb-2" :show="showSendFailed" variant="danger">Sending {{amountToSend}} to {{receiverName}} failed! Please check your funds by clicking the QR-Code above!</b-alert>
+        <b-alert class="mb-2" :show="showAmountToSend" variant="info">If you want to send: {{amountToSend}} to {{receiverName}} click the send button!</b-alert>
+        <b-alert class="mb-2" :show="showIsSending" variant="warning">Sending {{amountToSend}} to {{receiverName}}!</b-alert>
         <a href='#' v-if="showAmountToSend" v-on:click="sendEnergy" class='btn-done'>Send Energy</a>
       </div>
     </div>
@@ -261,7 +260,11 @@ export default {
       let qr = qrcode(typeNumber, errorCorrectionLevel)
       qr.addData('bitcoincash:' + addressP)
       qr.make()
-      document.getElementById('qrcodeId').innerHTML = qr.createSvgTag(8, 16)
+      // console.log(window.innerWidth)
+      let svg = qr.createSvgTag(6.7, 13.4)
+      let pos = svg.indexOf('white')
+      let output = svg.substr(0, pos) + '#17a2b800" rx="15" ry="15" ' + svg.substr(pos + 6)
+      document.getElementById('qrcodeId').innerHTML = output
     }
   },
   created () {
@@ -280,7 +283,6 @@ body {
   font-family: "Helvetica Neue", helvetica, arial;
   padding: 50px;
   font-size: 14px;
-  color: rgba(0,0,0,0.8);
 }
 hr {
   margin: 20px 0;
@@ -289,12 +291,11 @@ hr {
   height: 1px;
 }
 h2 {
-  background: rgba(0,0,0,0.04);
   font-size: 20px;
-  color: rgba(0,0,0,0.8);
+  color: rgba(256,256,256,0.75);
   padding: 10px;
-  font-weight: 700;
   margin: 0;
+  border-radius: 0.25em;
 }
 .btn-done {
   background: #009688;
@@ -304,6 +305,7 @@ h2 {
   display: block;
   text-align: center;
   padding: 10px;
+  border-radius: 0.25rem;
 }
 .btn-verify {
   background: #2196F3;
@@ -314,9 +316,9 @@ h2 {
   text-align: center;
   padding: 10px;
 }
-.container {
+.cont {
   margin:0 auto;
-  width: 400px;
+  width: 300px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   -ms-word-break: break-all;
@@ -326,6 +328,7 @@ h3 {
   font-size:20px;
 }
 .center {
+  border-radius: 0.25rem;
   text-align: center;
 }
 </style>
