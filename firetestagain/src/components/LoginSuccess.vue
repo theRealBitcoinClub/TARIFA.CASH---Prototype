@@ -1,14 +1,14 @@
 <template>
   <div class="loginSuccess">
-    <h2>{{email}}</h2>
-    <h3><a target='_blank' :href="explorer + adr">{{adr}}</a></h3>
     <div class='container'>
+      <h2>{{emailOrPhone}}</h2>
+      <h3><a target='_blank' :href="explorer + adr">{{adr}}</a></h3>
       <div class='center'>
         <a target='_blank' :href="explorer + adr">
           <div id="qrcodeId"></div>
         </a>
       </div>
-      <hr>
+      <hr />
       <div class="form">
         <div class="input-group mb-1">
           <div class="input-group-prepend">
@@ -18,28 +18,30 @@
             <option :value="data.address" v-for="(data, index) in merchants" :key="index">{{data.name}}</option>
           </select>
         </div>
-        <b-alert dismissible :show="showReceiverAlert" variant="danger">Please choose a receiver.</b-alert>
+        <b-alert :show="showReceiverAlert" variant="danger">Please choose a receiver.</b-alert>
         <div class="form-row mb-1">
           <div class="input-group mb-1 col">
             <div class="input-group-prepend">
               <span class="input-group-text">€</span>
             </div>
-            <input id='eur' type="number" class="form-control">
+            <input id='eur' type="number" min="0" class="form-control">
           </div>
           <div class="input-group mb-1 col">
             <div class="input-group-prepend">
               <span class="input-group-text">Cents</span>
             </div>
-            <input id='cent' type="number" class="form-control">
+            <input id='cent' type="number" min="0" max="99" class="form-control">
           </div>
         </div>
-        <b-alert dismissible :show="showEurosAlert" variant="danger">Please enter the amount in Euros.</b-alert>
-        <b-alert dismissible :show="showCommaEurosAlert" variant="danger">Please set the amount in EUR without comma, point or minus.</b-alert>
-        <b-alert dismissible :show="showCommaCentsAlert" variant="danger">Please set the amount in Cents without comma, point or minus.</b-alert>
-        <b-alert dismissible :show="showTooManyCentsAlert" variant="danger">Please set the amount in cents between 0 and 99.</b-alert>
-        <b-alert dismissible :show="showSendSuccess" variant="success">You did successfully send {{amountToSend}} to {{receiverName}}!</b-alert>
-        <b-alert dismissible :show="showSendFailed" variant="danger">Sending {{amountToSend}} to {{receiverName}} failed! Please try again!</b-alert>
-        <b-alert dismissible :show="showAmountToSend" variant="info">If you want to send: {{amountToSend}} to {{receiverName}} click the send button otherwise change the amount and verify again!</b-alert>
+        <b-alert :show="showEurosAlert" variant="danger">Please enter the amount in Euros.</b-alert>
+        <b-alert :show="showCommaEurosAlert" variant="danger">Please set the amount in EUR without comma, point or minus.</b-alert>
+        <b-alert :show="showCommaCentsAlert" variant="danger">Please set the amount in Cents without comma, point or minus.</b-alert>
+        <b-alert :show="showTooManyCentsAlert" variant="danger">Please set the amount in cents between 0 and 99.</b-alert>
+        <b-alert :show="showMinimumAmountAlert" variant="danger">Please enter an amount of more than 0,05€ in total.</b-alert>
+        <b-alert :show="showSendSuccess" variant="success">You did successfully send {{amountToSend}} to {{receiverName}}!</b-alert>
+        <b-alert :show="showSendFailed" variant="danger">Sending {{amountToSend}} to {{receiverName}} failed! Please check your funds by clicking the QR-Code or Address above!</b-alert>
+        <b-alert :show="showAmountToSend" variant="info">If you want to send: {{amountToSend}} to {{receiverName}} click the send button otherwise change the amount and verify again!</b-alert>
+        <b-alert :show="showIsSending" variant="warning">Sending {{amountToSend}} to {{receiverName}}!</b-alert>
         <a href='#' v-on:click="verifyInputs" class='btn-verify mb-1'>Verify Inputs</a>
         <a href='#' v-if="showAmountToSend" v-on:click="sendEnergy" class='btn-done'>Send Energy</a>
       </div>
@@ -67,8 +69,11 @@ export default {
       showSendFailed: false,
       showSendSuccess: false,
       showTooManyCentsAlert: false,
+      showMinimumAmountAlert: false,
+      showIsSending: false,
       amountToSend: '',
-      email: firebase.auth().currentUser != null ? (firebase.auth().currentUser.email != null ? firebase.auth().currentUser.email : firebase.auth().currentUser.phoneNumber) : 'You will be redirected to the login!',
+      receiverName: '',
+      emailOrPhone: firebase.auth().currentUser != null ? (firebase.auth().currentUser.email != null ? firebase.auth().currentUser.email : firebase.auth().currentUser.phoneNumber) : 'You will be redirected to the login!',
       explorer: 'https://explorer.bitcoin.com/bch/address/',
       adr: '',
       privKeyString: 'dummy',
@@ -80,10 +85,6 @@ export default {
         {
           name: 'Eco-Center',
           address: '1ENhH7BEt4C9Rb5DBFP8T9hyJcfvNEnySi'
-        },
-        {
-          name: 'El Olivo Herbolario',
-          address: '1PBm46XokQkQGNTtgRJm9WtVGzkAXj8QKY'
         }
       ]
     }
@@ -135,6 +136,7 @@ export default {
       this.showTooManyCentsAlert = false
       this.showSendFailed = false
       this.showSendSuccess = false
+      this.showMinimumAmountAlert = false
       if (receiver === '0') {
         this.showReceiverAlert = true
         return false
@@ -155,21 +157,34 @@ export default {
         this.showTooManyCentsAlert = true
         return false
       }
+      cString = this.setMinimumCents(cString)
+      let tot = this.getCentsTotal(eString, cString)
+      if (tot < 5) {
+        this.showMinimumAmountAlert = true
+        return false
+      }
       return true
     },
-    formatPrice (eString, cString) {
-      if (cString == null || cString === '' || cString === '0') {
-        cString = '00'
+    setMinimumCents (c) {
+      if (c == null || c === '' || c === '0') {
+        c = '00'
       }
+      return c
+    },
+    formatPrice (eString, cString) {
+      cString = this.setMinimumCents(cString)
       if (cString.length === 1) {
         cString = '0' + cString
       }
       return eString + ',' + cString + '€'
     },
-    getSatCount (eString, cString, bchPrice) {
+    getCentsTotal (eString, cString) {
+      cString = this.setMinimumCents(cString)
       let eur = parseInt(eString)
       let cent = parseInt(cString)
-      let centsTotal = (eur * 100) + cent
+      return (eur * 100) + cent
+    },
+    getSatCount (centsTotal, bchPrice) {
       let centPrice = bchPrice * 100
       let bchCount = centsTotal / centPrice
       return parseInt(bchCount * 100000000)
@@ -199,20 +214,17 @@ export default {
         return
       }
 
-      var priceString = this.formatPrice(eString, cString)
-      this.amountToSend = priceString
-      this.showAmountToSend = true
+      this.showIsSending = true
+      this.showAmountToSend = false
 
       let currentPrice = await BITBOX.Price.current('eur')
-
-      let satCount = this.getSatCount(eString, cString, currentPrice)
-
-      this.sendWithDataCash(priceString, this.receiverName, this.privKeyString, receiver, satCount)
+      let satCount = this.getSatCount(this.getCentsTotal(eString, cString), currentPrice)
+      this.sendWithDataCash(this.formatPrice(eString, cString), this.receiverName, this.privKeyString, receiver, satCount)
     },
-    sendWithDataCash (priceString, receiverName, pk, receiver, satCount) {
+    sendWithDataCash (priceString, rName, pk, receiver, satCount) {
       var self = this
       var config = {
-        data: ['0x6d02', 'http://tarifa.cash: ' + priceString + ' send to: ' + receiverName],
+        data: ['0x6d02', 'http://tarifa.cash: ' + priceString + ' send to: ' + rName],
         cash: {
           key: pk,
           rpc: 'https://cashexplorer.bitcoin.com',
@@ -224,12 +236,12 @@ export default {
         }
       }
       datacash.send(config, function (err, res) {
+        self.showIsSending = false
         if (err) {
           console.log(err)
           self.showSendSuccess = false
           self.showSendFailed = true
         } else {
-          self.showAmountToSend = false
           self.showSendFailed = false
           self.showSendSuccess = true
         }
@@ -246,7 +258,7 @@ export default {
     }
   },
   created () {
-    // this.goToLoginIfUserIsNull()
+    this.goToLoginIfUserIsNull()
     this.sendVerificationEmail()
   },
   beforeMount () {
@@ -269,23 +281,10 @@ hr {
   background: rgba(0,0,0,0.1);
   height: 1px;
 }
-h1 {
-  color: #4772F6;
-  text-align: center;
-  font-weight: 900;
-  font-size: 40px;
-}
-h1 > small {
-  font-size: 12px;
-  display: block;
-  font-weight: 400;
-}
 h2 {
   background: rgba(0,0,0,0.04);
   font-size: 20px;
   color: rgba(0,0,0,0.8);
-}
-h1, h2 {
   padding: 10px;
   font-weight: 700;
   margin: 0;
@@ -316,22 +315,8 @@ h1, h2 {
   -ms-word-break: break-all;
   word-break: break-word;
 }
-.hidden {
-  display: none;
-}
-#submit {
-  font-size: 12px;
-  text-align: center;
-}
-#submit > * {
-  margin: 10px;
-}
-.feed {
-  width: 100%;
-}
-.row {
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-  padding-bottom: 10px;
+h3 {
+  font-size:20px;
 }
 .center {
   text-align: center;
