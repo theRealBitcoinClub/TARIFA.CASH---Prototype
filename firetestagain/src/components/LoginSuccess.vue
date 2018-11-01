@@ -1,7 +1,24 @@
 <template>
   <div class="loginSuccess">
+    <b-navbar toggleable="md" type="dark" variant="info">
+      <b-navbar-brand href="#/loginSuccess">TARIFA.CASH</b-navbar-brand>
+      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+      <b-collapse is-nav id="nav_collapse">
+        <b-navbar-nav>
+          <b-nav-item href="#/loginSuccess">TCH Wallet</b-nav-item>
+          <b-nav-item href="#/tos">Terms of Service</b-nav-item>
+          <b-nav-item href="#/privacy">Privacy Policy</b-nav-item>
+        </b-navbar-nav>
+
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item href="#">{{emailOrPhone}}</b-nav-item>
+          <b-nav-item href="https://tarifa.cash">Signout</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
     <div class='cont'>
-      <h2>{{emailOrPhone}}</h2>
+      <!-- h2>{{emailOrPhone}}</h2-->
       <!-- h3><a target='_blank' :href="explorer + adr">{{adr}}</a></h3-->
       <div class='center mb-2'>
         <a target='_blank' :href="explorer + adr">
@@ -41,7 +58,7 @@
         <b-alert class="mb-2" :show="showSendFailed" variant="danger">Sending {{amountToSend}} to {{receiverName}} failed! Please check your funds by clicking the QR-Code above!</b-alert>
         <b-alert class="mb-2" :show="showAmountToSend" variant="info">If you want to send: {{amountToSend}} to {{receiverName}} click the send button!</b-alert>
         <b-alert class="mb-2" :show="showIsSending" variant="warning">Sending {{amountToSend}} to {{receiverName}}!</b-alert>
-        <a href='#' v-if="showAmountToSend" v-on:click="sendEnergy" class='btn-done'>Send Energy</a>
+        <a href='#' v-if="showAmountToSend" v-on:click="sendEnergy" class='btn-done mb-3'>Send Energy</a>
       </div>
     </div>
   </div>
