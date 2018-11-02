@@ -1,5 +1,23 @@
 <template>
 <div>
+<b-navbar toggleable="md" type="dark" variant="info">
+  <b-navbar-brand href="#">TARIFA.CASH</b-navbar-brand>
+  <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+  <b-collapse is-nav id="nav_collapse">
+    <b-navbar-nav>
+      <b-nav-item v-if="!emailOrPhone" href="/">Login</b-nav-item>
+      <b-nav-item v-if="emailOrPhone" href="#/loginSuccess">TCH Wallet</b-nav-item>
+      <b-nav-item href="#/tos">Terms of Service</b-nav-item>
+      <b-nav-item href="#/privacy">Privacy Policy</b-nav-item>
+    </b-navbar-nav>
+    <!-- Right aligned nav items -->
+    <b-navbar-nav class="ml-auto">
+      <b-nav-item v-if="emailOrPhone" :href="explorer+adr">{{adr}}</b-nav-item>
+      <b-nav-item v-if="emailOrPhone" href="#">{{emailOrPhone}}</b-nav-item>
+      <b-nav-item v-if="emailOrPhone" href="https://tarifa.cash">Signout</b-nav-item>
+    </b-navbar-nav>
+  </b-collapse>
+</b-navbar>
 <h1>Refund policy</h1>
 
 <p>Since our Website offers non-tangible, irrevocable goods we do not provide refunds after the product is purchased, which you acknowledge prior to purchasing any product on the Website. Please make sure that you've carefully read service description before making a purchase.</p>

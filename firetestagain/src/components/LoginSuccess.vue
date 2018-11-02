@@ -1,32 +1,27 @@
 <template>
   <div class="loginSuccess">
     <b-navbar toggleable="md" type="dark" variant="info">
-      <b-navbar-brand href="#/loginSuccess">TARIFA.CASH</b-navbar-brand>
+      <b-navbar-brand href="#">TARIFA.CASH</b-navbar-brand>
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
-          <b-nav-item href="#/loginSuccess">TCH Wallet</b-nav-item>
-          <b-nav-item href="#/tos">Terms of Service</b-nav-item>
-          <b-nav-item href="#/privacy">Privacy Policy</b-nav-item>
+          <b-nav-item v-if="!emailOrPhone" href="/">Login</b-nav-item>
+          <b-nav-item v-if="emailOrPhone" href="#/loginSuccess">TCH Wallet</b-nav-item>
+          <b-nav-item target="_blank" href="#/tos">Terms of Service</b-nav-item>
+          <b-nav-item target="_blank" href="#/privacy">Privacy Policy</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item href="#">{{emailOrPhone}}</b-nav-item>
-          <b-nav-item href="https://tarifa.cash">Signout</b-nav-item>
+          <b-nav-item v-if="emailOrPhone" target="_blank" :href="explorer+adr">{{adr}}</b-nav-item>
+          <b-nav-item v-if="emailOrPhone" href="#">{{emailOrPhone}}</b-nav-item>
+          <b-nav-item v-if="emailOrPhone" href="https://tarifa.cash">Signout</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
     <div class='cont'>
-      <!-- h2>{{emailOrPhone}}</h2-->
-      <!-- h3><a target='_blank' :href="explorer + adr">{{adr}}</a></h3-->
-      <div class='center mb-2'>
-        <a target='_blank' :href="explorer + adr">
-          <div id="qrcodeId"></div>
-        </a>
-      </div>
-      <div class="form">
-        <div class="input-group mb-2">
+      <form action>
+        <div class="input-group mb-2 mt-2">
           <div class="input-group-prepend">
             <label class="input-group-text" for="mySelect">Receiver:</label>
           </div>
@@ -49,7 +44,7 @@
             <input id='cent' type="number" min="0" max="99" class="form-control" @input="verifyInputs">
           </div>
         </div>
-        <b-alert class="mb-2" :show="showEurosAlert" variant="danger">Please enter the amount in Euros.</b-alert>
+        <b-alert class="mb-2" :show="showEurosAlert" variant="danger">Please enter the amount in Euros without comma, point or minus.</b-alert>
         <b-alert class="mb-2" :show="showCommaEurosAlert" variant="danger">Please set the amount in EUR without comma, point or minus.</b-alert>
         <b-alert class="mb-2" :show="showCommaCentsAlert" variant="danger">Please set the amount in Cents without comma, point or minus.</b-alert>
         <b-alert class="mb-2" :show="showTooManyCentsAlert" variant="danger">Please set the amount in cents between 0 and 99.</b-alert>
@@ -59,7 +54,13 @@
         <b-alert class="mb-2" :show="showAmountToSend" variant="info">If you want to send: {{amountToSend}} to {{receiverName}} click the send button!</b-alert>
         <b-alert class="mb-2" :show="showIsSending" variant="warning">Sending {{amountToSend}} to {{receiverName}}!</b-alert>
         <a href='#' v-if="showAmountToSend" v-on:click="sendEnergy" class='btn-done mb-3'>Send Energy</a>
-      </div>
+        <div class='center mb-2'>
+          <a :href="explorer + adr">
+            <div id="qrcodeId"></div>
+          </a>
+        </div>
+        <input type="submit" v-on:click="sendEnergy" style="visibility:hidden;position:absolute"/>
+      </form>
     </div>
   </div>
 </template>
@@ -158,18 +159,33 @@ export default {
       }
       if (eString == null || eString === '') {
         this.showEurosAlert = true
+        let inputE = document.getElementById('eur')
+        inputE.focus()
+        inputE.select()
         return false
       }
       if (eString.indexOf(',') !== -1 || eString.indexOf('.') !== -1 || eString.indexOf('-') !== -1) {
         this.showCommaEurosAlert = true
+        let inputE = document.getElementById('eur')
+        inputE.value = ''
+        inputE.focus()
+        inputE.select()
         return false
       }
       if (cString.indexOf(',') !== -1 || cString.indexOf('.') !== -1 || cString.indexOf('-') !== -1) {
         this.showCommaCentsAlert = true
+        let inputE = document.getElementById('cent')
+        inputE.value = ''
+        inputE.focus()
+        inputE.select()
         return false
       }
       if (cString.length > 2) {
         this.showTooManyCentsAlert = true
+        let inputE = document.getElementById('cent')
+        inputE.value = ''
+        inputE.focus()
+        inputE.select()
         return false
       }
       cString = this.setMinimumCents(cString)
@@ -228,6 +244,7 @@ export default {
       this.showAmountToSend = true
     },
     sendEnergy: async function (event) {
+      event.preventDefault()
       var receiver = $('#mySelect').val()
       this.receiverName = $('#mySelect option:selected').text()
       var eString = $('#eur').val()
