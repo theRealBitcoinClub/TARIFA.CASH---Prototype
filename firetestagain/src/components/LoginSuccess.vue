@@ -50,12 +50,12 @@
         <b-alert class="mb-2" :show="showTooManyCentsAlert" variant="danger">Please set the amount in cents between 0 and 99.</b-alert>
         <b-alert class="mb-2" :show="showMinimumAmountAlert" variant="danger">Please enter an amount of more than 0,05€ in total.</b-alert>
         <b-alert class="mb-2" :show="showSendSuccess" variant="success">You did successfully send {{amountToSend}} to {{receiverName}}!</b-alert>
-        <b-alert class="mb-2" :show="showSendFailed" variant="danger">Sending {{amountToSend}} to {{receiverName}} failed! Please check your funds by clicking the QR-Code above!</b-alert>
+        <b-alert class="mb-2" :show="showSendFailed" variant="danger">Sending {{amountToSend}} to {{receiverName}} failed! Please check your funds by clicking the QR-Code!</b-alert>
         <b-alert class="mb-2" :show="showAmountToSend" variant="info">If you want to send: {{amountToSend}} to {{receiverName}} click the send button!</b-alert>
         <b-alert class="mb-2" :show="showIsSending" variant="warning">Sending {{amountToSend}} to {{receiverName}}!</b-alert>
         <a href='#' v-if="showAmountToSend" v-on:click="sendEnergy" class='btn-done mb-3'>Send Energy</a>
         <div class='center mb-2'>
-          <a :href="explorer + adr">
+          <a target="_blank" :href="explorer + adr">
             <div id="qrcodeId"></div>
           </a>
         </div>
