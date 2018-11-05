@@ -23,6 +23,7 @@
     "firebaseui": "^3.4.1",
     "jquery": "^3.3.1",
     "popper.js": "^1.14.4",
+    "pwa-install-prompt": "^1.0.1",
     "qr-image": "^3.2.0",
     "qrcode-generator": "^1.4.1",
     "request": "^2.88.0",
