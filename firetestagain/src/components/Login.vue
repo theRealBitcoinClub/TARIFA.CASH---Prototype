@@ -63,20 +63,23 @@ require('firebase/messaging')
 
 // require('noty')
 const Noty = require('noty')
-new Noty({
-  theme: 'sunset',
-  text: 'Would you like to receive a notification as soon as more shops accept Tarifa Cash?',
-  buttons: [
-    Noty.button('YES', 'btn btn-success', function () {
-      Notification.requestPermission(function (status) {
-        console.log('Notification permission status:', status)
+if (Notification.permission == 'granted') {
+  const n = new Noty({
+    theme: 'sunset',
+    text: 'Would you like to receive a notification as soon as more shops accept Tarifa Cash?',
+    buttons: [
+      Noty.button('YES', 'btn btn-success', function () {
+        Notification.requestPermission(function (status) {
+          console.log('Notification permission status:', status)
+        })
+        n.close()
+      }, {id: 'button1', 'data-status': 'ok'}),
+      Noty.button('NO', 'btn btn-danger ml-3', function () {
+        n.close()
       })
-    }, {id: 'button1', 'data-status': 'ok'}),
-    Noty.button('NO', 'btn btn-error', function () {
-        n.close();
-    })
-  ]
-}).show()
+    ]
+  }).show()
+}
 
 /* pwaInstallPrompt('.pwa-install-prompt__container', {
   active_class: 'is-active',
