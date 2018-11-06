@@ -36,9 +36,9 @@ workbox.routing.registerRoute(
 );
 
 workbox.precaching.precacheAndRoute([
-    'qrcode.min.js',
-    'noty.css',
-    'loading.svg',
-    'firebaseui.css',
-    { url: '/index.html', revision: '383676' },
+    { url: 'qrcode.min.js', revision: '383677' },
+    { url: 'noty.css', revision: '383677' },
+    { url: 'loading.svg', revision: '383677' },
+    { url: 'firebaseui.css', revision: '383677' },
+    { url: '/', revision: '383677' },
 ]);

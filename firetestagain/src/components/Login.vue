@@ -49,12 +49,33 @@
 require('../assets/firebaseui.css')
 require('../assets/noty.css')
 require('../assets/themes/sunset.css')
-var firebase = require('firebase')
-var firebaseui = require('firebaseui')
+// var firebase = require('firebase')
+const firebaseui = require('firebaseui')
+// require('firebaseui')
+
+// Firebase App is always required and must be first
+const firebase = require('firebase/app')
+
+// Add additional services that you want to use
+require('firebase/auth')
+require('firebase/database')
+require('firebase/messaging')
+
+// require('noty')
 const Noty = require('noty')
 new Noty({
   theme: 'sunset',
-  text: 'Method called from main thread - check blablblablabla'
+  text: 'Would you like to receive a notification as soon as more shops accept Tarifa Cash?',
+  buttons: [
+    Noty.button('YES', 'btn btn-success', function () {
+      Notification.requestPermission(function (status) {
+        console.log('Notification permission status:', status)
+      })
+    }, {id: 'button1', 'data-status': 'ok'}),
+    Noty.button('NO', 'btn btn-error', function () {
+        n.close();
+    })
+  ]
 }).show()
 
 /* pwaInstallPrompt('.pwa-install-prompt__container', {

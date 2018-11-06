@@ -67,7 +67,16 @@
 
 <script>
 import {db} from '../firebase'
-var firebase = require('firebase')
+// var firebase = require('firebase')
+
+// Firebase App is always required and must be first
+const firebase = require('firebase/app')
+
+// Add additional services that you want to use
+require('firebase/auth')
+require('firebase/database')
+require('firebase/messaging')
+
 var datacash = require('datacash')
 var $ = require('jquery')
 let BITBOXSDK = require('bitbox-sdk/lib/bitbox-sdk').default
