@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition name="moveInUp">
+    <transition name="moveDown">
       <router-view/>
     </transition>
   </div>
@@ -12,9 +12,9 @@ export default {
   data () {
     return {
       url: 'https://tarifa.cash',
-      desc: 'Tarifa Cash is a local currency backed by BCH - Bitcoin Cash',
-      img: '/my-special-image.jpg',
-      title: 'TRBC - Tarifa Cash'
+      desc: 'Tarifa Cash is a local currency backed by BCH - Bitcoin Cash promoted by TRBC',
+      img: '/tarifacash_promo_1200x630.png',
+      title: 'TARIFA.CASH - TRBC'
     }
   },
   metaInfo () {
@@ -58,7 +58,7 @@ export default {
 </script>
 
 <style>
-.moveInUp-enter-active{
+.moveDown-enter-active{
   animation: fadeIn 1s ease-in;
 }
 
@@ -74,16 +74,16 @@ export default {
   }
 }
 
-.moveInUp-leave-active{
-  animation: moveInUp .3s ease-in;
+.moveDown-leave-active{
+  animation: moveDown .3s ease-in;
 }
 
-@keyframes moveInUp{
+@keyframes moveDown{
  0%{
   transform: translateY(0);
  }
   100%{
-  transform: translateY(-400px);
+  transform: translateY(1080px);
  }
 }
 

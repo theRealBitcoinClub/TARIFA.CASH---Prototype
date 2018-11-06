@@ -10,7 +10,6 @@
           <b-nav-item target="_blank" href="#/tos">Terms of Service</b-nav-item>
           <b-nav-item target="_blank" href="#/privacy">Privacy Policy</b-nav-item>
         </b-navbar-nav>
-
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-item v-if="emailOrPhone" target="_blank" :href="explorer+adr">{{adr}}</b-nav-item>
@@ -48,8 +47,15 @@
 <script>
 // import pwaInstallPrompt from 'pwa-install-prompt'
 require('../assets/firebaseui.css')
+require('../assets/noty.css')
+require('../assets/themes/sunset.css')
 var firebase = require('firebase')
 var firebaseui = require('firebaseui')
+const Noty = require('noty')
+new Noty({
+  theme: 'sunset',
+  text: 'Method called from main thread - check blablblablabla'
+}).show()
 
 /* pwaInstallPrompt('.pwa-install-prompt__container', {
   active_class: 'is-active',
@@ -116,7 +122,23 @@ firebase.auth().languageCode = 'ES'
 ui.start('#firebaseui-auth-container', uiConfig)
 
 export default {
-  name: 'Login'
+  name: 'Login',
+  data () {
+    return {
+      emailOrPhone: false
+    }
+  },
+  methods: {
+    showNotification () {
+      new Noty({
+        theme: 'sunset',
+        text: 'method called from vue'
+      }).show()
+    },
+    beforeMount () {
+      this.showNotification()
+    }
+  }
 }
 
 </script>
