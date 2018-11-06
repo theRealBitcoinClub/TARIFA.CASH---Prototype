@@ -2,8 +2,7 @@
   <div class="login">
     <b-navbar toggleable="md" type="dark" variant="info">
       <b-navbar-brand href="#"><img width="32px" height="32px" src="/static/tarifacash_logo_white_transparent_512x512.png" alt="logo"/></b-navbar-brand>
-      <button class="btn btn-success ml-auto">Always Show</button>
-      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+      <b-navbar-toggle style="outline:none;font-size:26px;font-weight:400;color:#ffffff;border-color:#ffffff;" target="nav_collapse">Menu</b-navbar-toggle>
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <b-nav-item v-if="emailOrPhone" href="#/loginSuccess">TCH Wallet</b-nav-item>
