@@ -36,10 +36,10 @@ workbox.routing.registerRoute(
 );
 
 workbox.precaching.precacheAndRoute([
-    { url: '/static/css/app.a8facb70de94e9fd26cc4078b588d11b.css', revision: '383678' },
-    { url: '/static/css/app.a8facb70de94e9fd26cc4078b588d11b.css.map', revision: '383678' },
-    { url: '/static/js/app.21d2251dab0288e4a68f.js', revision: '383678' },
-    { url: '/static/js/app.21d2251dab0288e4a68f.js.map', revision: '383678' },
+    { url: '/static/css/app.c74d77475e5133728fe31c96a9f55b1c.css', revision: '383678' },
+    { url: '/static/css/app.c74d77475e5133728fe31c96a9f55b1c.css.map', revision: '383678' },
+    { url: '/static/js/app.0e61caafb560892622e4.js', revision: '383678' },
+    { url: '/static/js/app.0e61caafb560892622e4.js.map', revision: '383678' },
     { url: '/static/js/vendor.e72f404bf5172d91f0e5.js', revision: '383678' },
     { url: '/static/js/vendor.e72f404bf5172d91f0e5.js.map', revision: '383678' },
     { url: '/static/qrcode.min.js', revision: '383678' },
