@@ -7,13 +7,21 @@
 </template>
 
 <script>
+// Check that service workers are registered
+if ('serviceWorker' in navigator) {
+  // Use the window load event to keep the page load performant
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/static/sw.js')
+  })
+}
+
 export default {
   name: 'App',
   data () {
     return {
       url: 'https://tarifa.cash',
       desc: 'Tarifa Cash is a local currency backed by BCH - Bitcoin Cash promoted by TRBC',
-      img: '/tarifacash_promo_1200x630.png',
+      img: '/static/tarifacash_promo_1200x630.png',
       title: 'TARIFA.CASH - TRBC'
     }
   },
