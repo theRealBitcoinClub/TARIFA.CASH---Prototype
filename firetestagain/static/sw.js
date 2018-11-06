@@ -36,9 +36,15 @@ workbox.routing.registerRoute(
 );
 
 workbox.precaching.precacheAndRoute([
-    { url: 'qrcode.min.js', revision: '383677' },
-    { url: 'noty.css', revision: '383677' },
-    { url: 'loading.svg', revision: '383677' },
-    { url: 'firebaseui.css', revision: '383679' },
-    { url: '/', revision: '383678' },
+    { url: '/static/css/app.a8facb70de94e9fd26cc4078b588d11b.css', revision: '383678' },
+    { url: '/static/css/app.a8facb70de94e9fd26cc4078b588d11b.css.map', revision: '383678' },
+    { url: '/static/js/app.21d2251dab0288e4a68f.js', revision: '383678' },
+    { url: '/static/js/app.21d2251dab0288e4a68f.js.map', revision: '383678' },
+    { url: '/static/js/vendor.e72f404bf5172d91f0e5.js', revision: '383678' },
+    { url: '/static/js/vendor.e72f404bf5172d91f0e5.js.map', revision: '383678' },
+    { url: '/static/qrcode.min.js', revision: '383678' },
+    { url: '/static/noty.css', revision: '383678' },
+    { url: '/static/loading.svg', revision: '383678' },
+    { url: '/static/firebaseui.css', revision: '383680' },
+    { url: '/index.html', revision: '383679' },
 ]);

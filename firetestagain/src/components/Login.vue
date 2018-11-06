@@ -2,6 +2,7 @@
   <div class="login">
     <b-navbar toggleable="md" type="dark" variant="info">
       <b-navbar-brand href="#"><img width="32px" height="32px" src="/static/tarifacash_logo_white_transparent_512x512.png" alt="logo"/></b-navbar-brand>
+      <button class="btn btn-success ml-auto">Always Show</button>
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
@@ -25,7 +26,7 @@
     </div>
     <div id="loader">
       <b-alert show>Loading...</b-alert>
-      <img src='../assets/loading.svg' />
+      <img src='/static/loading.svg' />
     </div>
     <div id="firebaseui-auth-container"></div>
     <div class='onesignal-customlink-container'></div>
@@ -46,9 +47,9 @@
 </template>
 <script>
 // import pwaInstallPrompt from 'pwa-install-prompt'
-require('../assets/firebaseui.css')
-require('../assets/noty.css')
-require('../assets/themes/sunset.css')
+require('../../static/firebaseui.css')
+require('../../static/noty.css')
+require('../../static/themes/sunset.css')
 // var firebase = require('firebase')
 const firebaseui = require('firebaseui')
 // require('firebaseui')
