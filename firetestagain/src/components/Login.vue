@@ -63,10 +63,10 @@ require('firebase/messaging')
 
 // require('noty')
 const Noty = require('noty')
-if (Notification.permission == 'granted') {
+if (Notification.permission != 'granted') {
   const n = new Noty({
     theme: 'sunset',
-    text: 'Would you like to receive a notification as soon as more shops accept Tarifa Cash?',
+    text: 'Would you like to receive <b>notifications</b> to your phone status bar as soon as more shops accept Tarifa Cash?',
     buttons: [
       Noty.button('YES', 'btn btn-success', function () {
         Notification.requestPermission(function (status) {
