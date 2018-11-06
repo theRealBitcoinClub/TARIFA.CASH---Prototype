@@ -75,7 +75,6 @@ const firebase = require('firebase/app')
 // Add additional services that you want to use
 require('firebase/auth')
 require('firebase/database')
-require('firebase/messaging')
 
 var datacash = require('datacash')
 var $ = require('jquery')

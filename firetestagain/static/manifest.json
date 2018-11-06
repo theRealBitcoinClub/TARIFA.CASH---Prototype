@@ -7,7 +7,7 @@
   "orientation": "portrait",
   "Scope": "/",
   "start_url": "/",
-  "gcm_sender_id": "482941778795",
+  "gcm_sender_id": "225078073600",
   "permissions": ["gcm", "storage", "notifications"],
   "icons": [
     {

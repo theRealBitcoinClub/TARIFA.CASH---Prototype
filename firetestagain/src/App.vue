@@ -5,13 +5,12 @@
     </transition>
   </div>
 </template>
-
 <script>
 // Check that service workers are registered
 if ('serviceWorker' in navigator) {
   // Use the window load event to keep the page load performant
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/static/sw.js')
+    navigator.serviceWorker.register('/static/OneSignalSDKWorker.js')
   })
 }
 

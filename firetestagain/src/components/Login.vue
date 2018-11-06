@@ -1,11 +1,10 @@
 <template>
   <div class="login">
     <b-navbar toggleable="md" type="dark" variant="info">
-      <b-navbar-brand href="#">TARIFA.CASH</b-navbar-brand>
+      <b-navbar-brand href="#"><img width="32px" height="32px" src="/static/tarifacash_logo_white_transparent_512x512.png" alt="logo"/></b-navbar-brand>
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
-          <b-nav-item v-if="!emailOrPhone" href="/">Login</b-nav-item>
           <b-nav-item v-if="emailOrPhone" href="#/loginSuccess">TCH Wallet</b-nav-item>
           <b-nav-item target="_blank" href="#/tos">Terms of Service</b-nav-item>
           <b-nav-item target="_blank" href="#/privacy">Privacy Policy</b-nav-item>
@@ -14,7 +13,8 @@
         <b-navbar-nav class="ml-auto">
           <b-nav-item v-if="emailOrPhone" target="_blank" :href="explorer+adr">{{adr}}</b-nav-item>
           <b-nav-item v-if="emailOrPhone" href="#">{{emailOrPhone}}</b-nav-item>
-          <b-nav-item v-if="emailOrPhone" href="https://tarifa.cash">Signout</b-nav-item>
+          <b-button v-if="!emailOrPhone" style="background-color:#17a2b8;border-color:#ffffff;" variant="success" class="my-2 my-sm-0"><b-link style="color:#ffffff" href="#/">Login</b-link></b-button>
+          <b-button v-if="emailOrPhone" style="background-color:#17a2b8;border-color:#ffffff;" variant="outline-success" class="my-2 my-sm-0"><b-link style="color:#ffffff" href="/">Logout</b-link></b-button>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -28,6 +28,7 @@
       <img src='../assets/loading.svg' />
     </div>
     <div id="firebaseui-auth-container"></div>
+    <div class='onesignal-customlink-container'></div>
     <!-- div class="pwa-install-prompt__container">
       <button class="pwa-install-prompt__overlay">Close</button>
       <div class="pwa-install-prompt">
@@ -43,7 +44,6 @@
     </div-->
   </div>
 </template>
-
 <script>
 // import pwaInstallPrompt from 'pwa-install-prompt'
 require('../assets/firebaseui.css')
@@ -59,11 +59,10 @@ const firebase = require('firebase/app')
 // Add additional services that you want to use
 require('firebase/auth')
 require('firebase/database')
-require('firebase/messaging')
 
 // require('noty')
 const Noty = require('noty')
-if (Notification.permission != 'granted') {
+if (Notification.permission !== 'granted') {
   const n = new Noty({
     theme: 'sunset',
     text: 'Would you like to receive <b>notifications</b> to your phone status bar as soon as more shops accept Tarifa Cash?',
@@ -80,6 +79,13 @@ if (Notification.permission != 'granted') {
     ]
   }).show()
 }
+
+var OneSignal = window.OneSignal || []
+OneSignal.push(function () {
+  OneSignal.init({
+    appId: '33c77356-dd40-448a-a02a-3dd6282557a7'
+  })
+})
 
 /* pwaInstallPrompt('.pwa-install-prompt__container', {
   active_class: 'is-active',
@@ -151,6 +157,12 @@ export default {
     return {
       emailOrPhone: false
     }
+  },
+  mounted () {
+    let s = document.createElement('script')
+    s.setAttribute('src', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js')
+    s.async = true
+    document.head.appendChild(s)
   },
   methods: {
     showNotification () {

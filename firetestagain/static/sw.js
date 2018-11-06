@@ -39,6 +39,6 @@ workbox.precaching.precacheAndRoute([
     { url: 'qrcode.min.js', revision: '383677' },
     { url: 'noty.css', revision: '383677' },
     { url: 'loading.svg', revision: '383677' },
-    { url: 'firebaseui.css', revision: '383677' },
-    { url: '/', revision: '383677' },
+    { url: 'firebaseui.css', revision: '383679' },
+    { url: '/', revision: '383678' },
 ]);
