@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Navigation></Navigation>
     <h3>Email verification is mandatory!</h3>
     <h4>
       <a href='https://tarifa.cash'>Click here after email verification!</a>
@@ -8,8 +9,12 @@
 </template>
 
 <script>
+import Navigation from '@/components/Navigation'
 export default {
-  name: 'VerifyEmail'
+  name: 'VerifyEmail',
+  components: {
+    'Navigation': Navigation
+  }
 }
 </script>
 
