@@ -8,7 +8,6 @@
       <h4 class="animated fadeInDown delay4 mb-2">You can charge TCH in all participating shops, check out our <a href="https://map.tarifa.cash">MAP</a> or <a href="https://news.tarifa.cash">NEWS</a> page!</h4>
       <h4 class="animated fadeInDown delay4">Tarifa Cash gives you a discount on all of your purchases, we are growing a sustainable local community!</h4>
     </div>
-    <div class='onesignal-customlink-container'></div>
   </div>
 </template>
 <script>
@@ -38,14 +37,12 @@ export default {
       s.setAttribute('src', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js')
       document.head.appendChild(s)
 
-      if (typeof OneSignal === 'undefined') {
-        const OneSignal = window.OneSignal || []
-        OneSignal.push(function () {
-          OneSignal.init({
-            appId: '33c77356-dd40-448a-a02a-3dd6282557a7'
-          })
+      var OneSignal = window.OneSignal || []
+      OneSignal.push(function () {
+        OneSignal.init({
+          appId: '33c77356-dd40-448a-a02a-3dd6282557a7'
         })
-      }
+      })
     },
     initChat () {
       const s1 = document.createElement('script')
