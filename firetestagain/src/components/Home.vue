@@ -8,6 +8,7 @@
       <h4 class="animated fadeInDown delay4 mb-2">You can charge TCH in all participating shops, check out our <a href="https://map.tarifa.cash">MAP</a> or <a href="https://news.tarifa.cash">NEWS</a> page!</h4>
       <h4 class="animated fadeInDown delay4">Tarifa Cash gives you a discount on all of your purchases, we are growing a sustainable local community!</h4>
     </div>
+    <div class='onesignal-customlink-container'></div>
   </div>
 </template>
 <script>
