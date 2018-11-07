@@ -28,34 +28,48 @@ export default {
     }
   },
   mounted () {
-    let s = document.createElement('script')
-    s.setAttribute('src', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js')
-    // s.async = true
-    document.head.appendChild(s)
-
-    var OneSignal = window.OneSignal || []
-    OneSignal.push(function () {
-      OneSignal.init({
-        appId: '33c77356-dd40-448a-a02a-3dd6282557a7'
-      })
-    })
-
+    this.initPushMessageProvider()
+    this.initChat()
     this.showNotification()
   },
   methods: {
+    initPushMessageProvider () {
+      const s = document.createElement('script')
+      s.setAttribute('src', 'https://cdn.onesignal.com/sdks/OneSignalSDK.js')
+      document.head.appendChild(s)
+
+      if (typeof OneSignal === 'undefined') {
+        const OneSignal = window.OneSignal || []
+        OneSignal.push(function () {
+          OneSignal.init({
+            appId: '33c77356-dd40-448a-a02a-3dd6282557a7'
+          })
+        })
+      }
+    },
+    initChat () {
+      const s1 = document.createElement('script')
+      const s0 = document.getElementsByTagName('script')[0]
+      s1.async = true
+      s1.src = 'https://embed.tawk.to/5be2bf4970ff5a5a3a710573/default'
+      s1.charset = 'UTF-8'
+      s1.setAttribute('crossorigin', '*')
+      s0.parentNode.insertBefore(s1, s0)
+    },
     showNotification () {
       if (Notification.permission !== 'granted') {
         const n = new Noty({
           theme: 'sunset',
+          killer: true,
           text: 'Would you like to receive <b>notifications</b> to your phone status bar as soon as more shops accept Tarifa Cash?',
           buttons: [
-            Noty.button('YES', 'btn btn-success', function () {
+            Noty.button('Maybe later!', 'btn btn-danger', function () {
+              n.close()
+            }),
+            Noty.button('YES, Please!', 'btn btn-success float-right', function () {
               Notification.requestPermission(function (status) {
                 console.log('Notification permission status:', status)
               })
-              n.close()
-            }, {id: 'button1', 'data-status': 'ok'}),
-            Noty.button('NO', 'btn btn-danger ml-3', function () {
               n.close()
             })
           ]
