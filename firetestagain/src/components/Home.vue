@@ -2,13 +2,13 @@
   <div class="login">
     <Navigation></Navigation>
     <div class="container">
+      <div class='onesignal-customlink-container'></div>
       <h1 class="animated fadeInDown delay1 mb-2">TCH - Tarifa Cash</h1>
       <h2 class="animated fadeInDown delay2 mb-2">Tarifa Cash is a local currency backed by BCH - Bitcoin</h2>
       <h3 class="animated fadeInDown delay3 mb-2">It is a 100% transparent, 100% unfakeable currency which can not be abused for speculation!</h3>
       <h4 class="animated fadeInDown delay4 mb-2">You can charge TCH in all participating shops, check out our <a href="https://map.tarifa.cash">MAP</a> or <a href="https://news.tarifa.cash">NEWS</a> page!</h4>
       <h4 class="animated fadeInDown delay4">Tarifa Cash gives you a discount on all of your purchases, we are growing a sustainable local community!</h4>
     </div>
-    <div class='onesignal-customlink-container'></div>
   </div>
 </template>
 <script>

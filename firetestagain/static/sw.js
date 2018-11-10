@@ -36,15 +36,15 @@ workbox.routing.registerRoute(
 );
 
 workbox.precaching.precacheAndRoute([
-    { url: '/static/css/app.c74d77475e5133728fe31c96a9f55b1c.css', revision: '383678' },
+    /* { url: '/static/css/app.c74d77475e5133728fe31c96a9f55b1c.css', revision: '383678' },
     { url: '/static/css/app.c74d77475e5133728fe31c96a9f55b1c.css.map', revision: '383678' },
     { url: '/static/js/app.0e61caafb560892622e4.js', revision: '383678' },
     { url: '/static/js/app.0e61caafb560892622e4.js.map', revision: '383678' },
     { url: '/static/js/vendor.e72f404bf5172d91f0e5.js', revision: '383678' },
-    { url: '/static/js/vendor.e72f404bf5172d91f0e5.js.map', revision: '383678' },
+    { url: '/static/js/vendor.e72f404bf5172d91f0e5.js.map', revision: '383678' }, */
     { url: '/static/qrcode.min.js', revision: '383678' },
     { url: '/static/noty.css', revision: '383678' },
     { url: '/static/loading.svg', revision: '383678' },
-    { url: '/static/firebaseui.css', revision: '383680' },
-    { url: '/index.html', revision: '383679' },
+    { url: '/static/firebaseui.css', revision: '383680' }
+    /* { url: '/index.html', revision: '383680' } */
 ]);
