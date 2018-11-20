@@ -4,6 +4,10 @@ This project is written in JavaScript using Vue.js and Firebase.
 
 It is a Single Page App, including a Service Worker for caching and it is installable as PWA (Progressive Web App)
 
+It uses the BITBOX SDK to grab the current BCH Price and it uses the datacash lib by unwriter to send the transaction.
+
+All transactions are also being sent to MEMO.CASH, so when people consume everyone can see it!
+
 The project is hosted on https://tarifa.cash
 
 You can login and then you can charge with the provided QR-Code
