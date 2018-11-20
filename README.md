@@ -1,5 +1,9 @@
 # tarifa.cash
 
+This project is written in JavaScript using Vue.js and Firebase.
+
+It is a Single Page App, including a Service Worker for caching and it is installable as PWA (Progressive Web App)
+
 The project is hosted on https://tarifa.cash
 
 You can login and then you can charge with the provided QR-Code
