@@ -29,3 +29,15 @@ At the moment this is a MVP.
 It can be modified easily to work reliable within less than one day.
 
 All you need is a working receiving address and make the layout more pretty.
+
+unwriter, datacash
+https://github.com/unwriter/datacash
+https://docs.bitdb.network/docs/bitdb
+bitcoincashjs
+https://github.com/bitcoincashjs/bitcoincashjs
+https://bitcoincashjs.github.io
+bitbox
+https://developer.bitcoin.com/bitbox.html
+QR CODE
+https://github.com/davidshimjs/qrcodejs
+
