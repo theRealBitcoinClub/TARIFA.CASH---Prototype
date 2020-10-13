@@ -3,7 +3,7 @@
     <Navigation></Navigation>
     <h3>Email verification is mandatory!</h3>
     <h4>
-      <a href='https://tarifa.cash'>Click here after email verification!</a>
+      <a href='https://tarifacash.firebaseapp.com'>Click here after email verification!</a>
     </h4>
   </div>
 </template>
